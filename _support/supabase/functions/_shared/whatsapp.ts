@@ -43,16 +43,16 @@ export async function hashToken(token: string): Promise<string> {
 
 /** Evaluate calendar hints in the linked person's timezone, not the server's UTC day. */
 export function classifyWhatsApp(content: string, timezone: string, receivedAt: string) {
-  const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' });
+  const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   const parts = formatter.formatToParts(new Date(receivedAt));
   const part = (type: string) => parts.find((value) => value.type === type)!.value;
   // Give the calendar parser the sender's date in the runtime's local calendar.
   // This works in UTC Edge Functions and non-UTC development/test environments.
-  const localDay = new Date(Number(part('year')), Number(part('month')) - 1, Number(part('day')), 12);
+  const localDay = new Date(Number(part('year')), Number(part('month')) - 1, Number(part('day')), Number(part('hour')), Number(part('minute')));
   const result = classifyItem(content, localDay);
   if (result.due_at) {
     const due = new Date(result.due_at);
-    const desired = new Date(Date.UTC(due.getFullYear(), due.getMonth(), due.getDate(), 12));
+    const desired = new Date(Date.UTC(due.getFullYear(), due.getMonth(), due.getDate(), due.getHours(), due.getMinutes()));
     const localParts = new Intl.DateTimeFormat('en-US', {
       timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit',
       hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',

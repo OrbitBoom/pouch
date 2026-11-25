@@ -101,3 +101,9 @@ describe('formatAmount', () => {
     expect(formatAmount(500)).toBe('500');
   });
 });
+
+it('keeps explicit reminder times and rolls a past time-only reminder to tomorrow', () => {
+  const base = new Date(2026, 10, 25, 19);
+  expect(classifyItem('Remind me to call tomorrow at 4:15pm', base).due_at).toBe(new Date(2026, 10, 26, 16, 15).toISOString());
+  expect(detectDueDate('Call at 18:30', base)).toBe(new Date(2026, 10, 26, 18, 30).toISOString());
+});

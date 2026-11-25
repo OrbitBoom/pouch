@@ -335,12 +335,13 @@ function ItemDetail({ id }: { id: string }) {
             {dueAt ? (
               <View style={styles.section}>
                 <DateField label="Due date" value={dueAt} onChange={setDueAt} />
+                <DateField label="Reminder time" mode="time" value={dueAt} onChange={setDueAt} />
                 <PressableScale onPress={() => setDueAt(null)}><Text style={{ color: theme.accent }}>Remove due date</Text></PressableScale>
               </View>
             ) : (
               <PressableScale
                 scaleTo={0.98}
-                onPress={() => setDueAt(new Date())}
+                onPress={() => setDueAt(new Date(Date.now() + 3600000))}
                 style={[styles.addDueButton, { borderColor: theme.borderStrong }]}>
                 <Text style={{ color: theme.accent, fontWeight: '700' }}>+ Add due date</Text>
               </PressableScale>

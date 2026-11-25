@@ -10,6 +10,8 @@ import { AuthGate } from '@/components/auth-gate';
 import { ShareCapture } from '@/components/share-capture';
 import { useThemeColors } from '@/constants/ui';
 
+import { ReminderSync } from '@/components/reminder-sync';
+
 function RootNavigator() {
   const colorScheme = useColorScheme();
   const theme = useThemeColors(colorScheme === 'dark');
@@ -34,6 +36,7 @@ function RootNavigator() {
             contentStyle: { backgroundColor: theme.background },
           }}>
           <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="calendar" options={{ title: 'Reminder calendar' }} />
           <Stack.Screen name="accounts" options={{ title: 'Accounts' }} />
           <Stack.Screen name="space" options={{ title: 'Your space' }} />
           <Stack.Screen name="whatsapp" options={{ title: 'WhatsApp to Pouch' }} />
@@ -41,6 +44,7 @@ function RootNavigator() {
           <Stack.Screen name="item/[id]" options={{ title: 'Item' }} />
         </Stack>
         <ShareCapture />
+        <ReminderSync />
       </ItemsProvider>
     </AuthGate>
   );

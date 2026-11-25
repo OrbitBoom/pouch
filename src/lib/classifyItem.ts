@@ -104,9 +104,11 @@ export function detectPriority(content: string): TaskPriority | null {
 
 export function detectDueDate(content: string, baseDate = new Date()): string | null {
   const lower = content.toLowerCase();
+  const clock = lower.match(/\b(?:at\s+)?(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(am|pm)\b/) ?? lower.match(/\bat\s+([01]?\d|2[0-3]):([0-5]\d)\b/);
+  const hours = clock ? (clock[3] ? Number(clock[1]) % 12 + (clock[3] === 'pm' ? 12 : 0) : Number(clock[1])) : 12;
   const startOfDay = (date: Date) => {
     const next = new Date(date);
-    next.setHours(12, 0, 0, 0);
+    next.setHours(hours, Number(clock?.[2] ?? 0), 0, 0);
     return next;
   };
 
@@ -155,6 +157,11 @@ export function detectDueDate(content: string, baseDate = new Date()): string | 
     }
   }
 
+  if (clock) {
+    const next = startOfDay(baseDate);
+    if (next <= baseDate) next.setDate(next.getDate() + 1);
+    return next.toISOString();
+  }
   return null;
 }
 

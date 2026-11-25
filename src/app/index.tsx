@@ -481,6 +481,9 @@ export default function InboxScreen() {
       </View>
 
       <View style={[styles.footerLinks, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}>
+        <PressableScale accessibilityRole="button" onPress={() => router.push('./calendar')}>
+          <Text style={[styles.footerLink, { color: theme.accent }]}>Calendar</Text>
+        </PressableScale>
         <PressableScale onPress={() => router.push('/accounts')} scaleTo={0.95}>
           <Text style={[styles.footerLink, { color: theme.accent }]}>Accounts</Text>
         </PressableScale>
